@@ -25,14 +25,14 @@ void loop(){
         status_update();
     }
 
-    // Check if BT message recieved 
+    // Check if BT message received 
     if(Serial.available() > 0){
         com_code = Serial.read();
         if(com_code != char(13) && com_code != char(10))
             com_commands();
     }
 
-    // Check time for next recieve/log of CAN message
+    // Check time for next receive/log of CAN message
     if(check_if_time(lastLog, logMillis) && msgToRead){
         if(msgToRead == 3){
             msgToRead = 1;

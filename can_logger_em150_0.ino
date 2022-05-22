@@ -83,11 +83,11 @@ void can_send_data(){
     byte sndStat = CAN0.sendMsgBuf(CAN_SEND_ID, 1, 8, canSend_data);
     if(sndStat == CAN_OK){
         failSends = 0;
-        failFlags = failFlags & ~FAIL_CTX;      //Clear failflag of CAN TX
+        failFlags = failFlags & ~FAIL_CTX;                  //Clear failflag of CAN TX
     } else {
         failSends++;
         if(failSends >= txFails){
-            failFlags = failFlags | FAIL_CTX;   //Set fail flag for CAN TX
+            failFlags = failFlags | FAIL_CTX;               //Set fail flag for CAN TX
         }
     }
     status_update();
@@ -144,7 +144,7 @@ void com_commands(){
 }
 
 void get_date_time(){
-        DateTime now = RTC.now();                                     // read the time from the RTC
+        DateTime now = RTC.now();                                   // read the time from the RTC
         utc = (now.unixtime());
         sprintf(dateString, "%04d-%02d-%02d", now.year(), now.month(), now.day());
         sprintf(timeString, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
@@ -155,9 +155,9 @@ void no_data_log(){
     File dataFile = SD.open(filename, FILE_WRITE);
     dataFile.print(dateString);dataFile.print(delimiter);
     dataFile.print(timeString);dataFile.print(delimiter);
-    for(byte n=0; n<12; n++)   dataFile.print(delimiter);   // skip all missing data points
-    dataFile.print(failFlags, HEX); dataFile.println(delimiter); // add failflags to log
-    dataFile.flush();                                       // wait for serial data to complete transmission
+    for(byte n=0; n<12; n++)   dataFile.print(delimiter);           // skip all missing data points
+    dataFile.print(failFlags, HEX); dataFile.println(delimiter);    // add failflags to log
+    dataFile.flush();                                               // wait for serial data to complete transmission
     dataFile.close();
 }
 
@@ -177,7 +177,7 @@ void data_translate(){
 
     unsigned char dataByte=0;
     if ((rxId & 0x1FFFFFFF) == 0x10261022 && msgToRead == 1){
-        failFlags = failFlags & ~FAIL_CRX; //Clear failflag of CAN RX
+        failFlags = failFlags & ~FAIL_CRX;                          //Clear failflag of CAN RX
         
         get_date_time();
 

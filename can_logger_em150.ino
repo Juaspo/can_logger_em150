@@ -40,7 +40,7 @@
 #define GREEN           0b00000010              // Green status color
 #define BLUE            0b00000100              // Blue status color
 #define LED_OFF         0x00                    // Turn off LED
-#define DEF_LOG_TIME    100                     // ms between log samples
+#define DEF_LOG_TIME    100                     // Default log sampling time
 
 // Fail flags
 #define FAIL_MCP        0x01                    // Failflag for MCP
@@ -56,7 +56,7 @@
 #define CAN_SEND_DATA   {0x01, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00}
 #define CAN_LOGGER_BTN  8                       // Toggle switch for can logger
 #define SEND_EN         7                       // Pin nr to enable LCD CAN emulator
-#define SEND_INTERVAL   250                     // interval to send CAN data to controller
+#define SEND_INTERVAL   250                     // Interval to send CAN data to controller
 
 // uSDcard parameters
 #define MOSIpin         11                       // For SD card
