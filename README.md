@@ -38,17 +38,16 @@
 | GND  |                                |
 | VIN  |                                |
 
-## Fail flags 
-| Bit | Error                  |
-|-----|------------------------|
-| 1   | MCP initiate error     |
-| 2   | SD card reader error   |
-| 3   | RTC error              |
-| 4   | -                      |
-| 5   | CAN receive error (RX) |
-| 6   | CAN send error (TX)    |
-| 7   | -                      |
-| 8   | -                      |
+| Bit | HEX | DEC | Error                  |
+|-----|-----|-----|------------------------|
+| 1   | 01  | 1   | MCP initiate error     |
+| 2   | 02  | 2   | SD card reader error   |
+| 3   | 04  | 4   | RTC error              |
+| 4   | 08  | 8   | -                      |
+| 5   | 10  | 16  | CAN receive error (RX) |
+| 6   | 20  | 32  | CAN send error (TX)    |
+| 7   | 40  | 64  | -                      |
+| 8   | 80  | 128 | -                      |
 
 ## Run status
 variable msgToRead store the current run mode
