@@ -14,7 +14,7 @@
 
 
 //Memory use
-//1560
+//1550
 
 * Libraries
 * Global variables

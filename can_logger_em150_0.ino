@@ -40,6 +40,7 @@ void status_led(byte led_status){
 void log_on(){
     msgToRead = 1;
     create_new_file();
+    lastLog = millis();
     status_update();
     Serial.println("Log On");
 }
@@ -150,6 +151,7 @@ void get_date_time(){
 }
 
 void no_data_log(){
+    get_date_time();
     File dataFile = SD.open(filename, FILE_WRITE);
     dataFile.print(dateString);dataFile.print(delimiter);
     dataFile.print(timeString);dataFile.print(delimiter);
