@@ -38,6 +38,8 @@
 | GND  |                                |
 | VIN  |                                |
 
+## Fail flags
+
 | Bit | HEX | DEC | Error                  |
 |-----|-----|-----|------------------------|
 | 1   | 01  | 1   | MCP initiate error     |
