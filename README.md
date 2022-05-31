@@ -8,7 +8,7 @@
 | RX  | Bluetooth TX                  |
 | RST | -                             |
 | GND | Idle, waiting for time delay  |
-| 2   |                               |
+| 2   | MCP interrupt output pin      |
 | 3   |                               |
 | 4   | Red LED                       |
 | 5   | Green LED                     |
@@ -17,8 +17,8 @@
 | 8   | CAN logger button             |
 | 9   | MCP CS pin                    |
 | 10  | SD card CS pin                |
-| 11  | SPI MOSI                      |
-| 12  | SPI MISO                      |
+| 11  | SPI MOSI (SI)                 |
+| 12  | SPI MISO (SO)                 |
 
 | Pin  | Connection                     |
 |------|--------------------------------|
@@ -35,7 +35,7 @@
 | A7   |                                |
 | 5V   | RTC, 1117-33 voltage regulator |
 | RST  |                                |
-| GND  |                                |
+| GND  | GND MCP, logger shield         |
 | VIN  |                                |
 
 ## Fail flags
