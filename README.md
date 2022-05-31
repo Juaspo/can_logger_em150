@@ -7,7 +7,7 @@
 | TX  | Bluetooth RX (3.3V)           |
 | RX  | Bluetooth TX                  |
 | RST | -                             |
-| GND | Idle, waiting for time delay  |
+| GND |                               |
 | 2   | MCP interrupt output pin      |
 | 3   |                               |
 | 4   | Red LED                       |
