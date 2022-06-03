@@ -45,7 +45,7 @@
 | 1   | 01  | 1   | MCP initiate error     |
 | 2   | 02  | 2   | SD card reader error   |
 | 3   | 04  | 4   | RTC error              |
-| 4   | 08  | 8   | -                      |
+| 4   | 08  | 8   | SD write file error    |
 | 5   | 10  | 16  | CAN receive error (RX) |
 | 6   | 20  | 32  | CAN send error (TX)    |
 | 7   | 40  | 64  | -                      |
