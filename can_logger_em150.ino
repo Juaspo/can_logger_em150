@@ -1,6 +1,7 @@
 /*
  CAN-logger for EM150
  Nano pin config:
+ 2 - CAN int
  4 - Red LED
  5 - Green LED
  6 - Blue LED
@@ -44,8 +45,9 @@
 
 // Fail flags
 #define FAIL_MCP        0x01                    // Failflag for MCP
-#define FAIL_SD         0x02                    // Failflag for SD
+#define FAIL_SD         0x02                    // Failflag for SD card
 #define FAIL_RTC        0x04                    // Failflag for RTC
+#define FAIL_SDRW       0x08                    // Failflag for SD read/write
 #define FAIL_CRX        0x10                    // Failflag for CAN RX
 #define FAIL_CTX        0x20                    // Failflag for CAN TX
 
@@ -79,6 +81,7 @@ unsigned long last_sent_time = 0;
 long unsigned int rxId;
 unsigned char len = 0;
 unsigned char rxBuf[8];
+char msgString[128];
 
 // RTC variables
 char dateString[] = "YYYY-MM-DD";               // a template for date string
@@ -92,12 +95,13 @@ unsigned long lastLog = 0;
 unsigned long logMillis = DEF_LOG_TIME;
 char delimiter = ',';
 byte com_code = 'X';
-byte failFlags = 0;             // fail flags: 8:- 7:- [6:CAN-TX][5:CAN-RX] 4:-[3:RTC][2:SD][1:MCP]
+byte failFlags = 0;             // fail flags: 8:- 7:- [6:CAN-TX][5:CAN-RX] [4:SD RW][3:RTC][2:SD][1:MCP]
 byte lastFailFlag = 0;
 byte ledStatus = 0;
 bool btnReleased = true;
 int btnCooldown = 1000;
 unsigned long btnTimer = 0;
+byte msAppend = 0;
 
 char dateStr[] = "date: ";
 char timeStr[] = "time: ";

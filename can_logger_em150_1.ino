@@ -12,9 +12,9 @@ void setup(){
     
     // Initialize MCP2515 running at 8MHz with a baudrate of 250kb/s
     if(CAN0.begin(MCP_ANY, CAN_250KBPS, MCP_8MHZ) == CAN_OK)
-        Serial.println("MCP OK");
+        Serial.println(F("MCP OK"));
     else{
-        Serial.print("MCP");
+        Serial.print(F("MCP"));
         Serial.println(failStr);
         failFlags = failFlags | FAIL_MCP;
     }
@@ -31,19 +31,19 @@ void setup(){
     */
     Wire.begin();
     if (! RTC.begin()) {
-        Serial.print("RTC");
+        Serial.print(F("RTC"));
         Serial.println(failStr);
         Serial.flush();
         failFlags = failFlags | FAIL_RTC;
-    }else Serial.println("RTC OK");
+    }else Serial.println(F("RTC OK"));
     while (!Serial) {;}                            // wait for serial port to connect. Needed for native USB port only
 
     //SD card init
     if (!SD.begin(SD_CS_PIN)) {
-        Serial.print("SD");
+        Serial.print(F("SD"));
         Serial.println(failStr);
         failFlags = failFlags | FAIL_SD;
-    }else Serial.println("SD OK");
+    }else Serial.println(F("SD OK"));
 
     Serial.print(logtStr);
     Serial.println(logMillis);
@@ -54,12 +54,11 @@ void setup(){
         dataFile.close();
     }
     else {
-        Serial.print("File");                       // if the file is not open, display an error:
+        Serial.print(F("File"));                       // if the file is not open, display an error:
         Serial.println(failStr);
+        failFlags = failFlags | FAIL_SDRW;
     }
-
-    delay(1000);
     status_update();                                // update error flags and status LED
-    Serial.print("Ready ");
+    Serial.print(F("Ready "));
     Serial.println(failFlags);
 }

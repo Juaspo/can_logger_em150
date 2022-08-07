@@ -7,14 +7,14 @@
 void status_update(){
     if (failFlags & 0x0F){
         status_led(RED);
-        Serial.print("Fatal err: 0x");
+        Serial.print(F("Fatal err: 0x0"));
         Serial.println(failFlags, HEX);
         while(1){
             delay(250);
             status_led(RED);
             delay(250);
             status_led(LED_OFF);
-        } 
+        }
     }
     else if(failFlags & 0xF0){
         status_led(RED);
@@ -31,7 +31,6 @@ void status_update(){
 }
 
 void status_led(byte led_status){
-    ledStatus = led_status;
     digitalWrite(R_LED, led_status & RED);
     digitalWrite(G_LED, led_status & GREEN);
     digitalWrite(B_LED, led_status & BLUE);
@@ -42,13 +41,13 @@ void log_on(){
     create_new_file();
     lastLog = millis();
     status_update();
-    Serial.println("Log On");
+    Serial.println(F("Log On"));
 }
 void log_off(){
-    failFlags = failFlags & ~FAIL_CRX; //Clear failflag of CAN TX
+    failFlags = failFlags & ~FAIL_CRX; //Clear failflag of CAN RX
     msgToRead = 0;
     status_update();
-    Serial.println("Log Off");
+    Serial.println(F("Log Off"));
     delay(1000);
 }
 
@@ -73,7 +72,7 @@ void create_new_file(){
     dataFile.print("T%");dataFile.print(delimiter);
     dataFile.print("EC2");dataFile.print(delimiter);
     dataFile.println("FF");
-    
+
     dataFile.flush();                                        // wait for serial data to complete transmission
     dataFile.close();
 }
@@ -154,7 +153,13 @@ void no_data_log(){
     get_date_time();
     File dataFile = SD.open(filename, FILE_WRITE);
     dataFile.print(dateString);dataFile.print(delimiter);
-    dataFile.print(timeString);dataFile.print(delimiter);
+    dataFile.print(timeString);
+
+    if(logMillis <= 100){
+        dataFile.print(msAppend);
+    }
+
+    dataFile.print(delimiter);
     for(byte n=0; n<12; n++)   dataFile.print(delimiter);           // skip all missing data points
     dataFile.print(failFlags, HEX); dataFile.println(delimiter);    // add failflags to log
     dataFile.flush();                                               // wait for serial data to complete transmission
@@ -178,7 +183,7 @@ void data_translate(){
     unsigned char dataByte=0;
     if ((rxId & 0x1FFFFFFF) == 0x10261022 && msgToRead == 1){
         failFlags = failFlags & ~FAIL_CRX;                          //Clear failflag of CAN RX
-        
+
         get_date_time();
 
         File dataFile = SD.open(filename, FILE_WRITE);
@@ -186,24 +191,22 @@ void data_translate(){
         dataFile.print(timeString);dataFile.print(delimiter);
 
         //Create divisor --------------------------------------------------
-        for (byte i=0; i<25; i++){
-            Serial.print("--");
-        }Serial.println();
+        Serial.print(F("----------------------------------------------------"));
 
-        int i=0;
+        //int i=0;
         dataByte = rxBuf[0];
 
         //Error codes
-        Serial.print("Err1: ");
+        Serial.print(F("Err1: "));
         if(dataByte == 0){
             Serial.print(errCode[0]);
             dataFile.print(errCode[0]);
         }
         else{
-            for(int i=1; i<6; i++){
+            for(byte i=1; i<6; i++){
                 if(dataByte & filter){
                     Serial.print(errCode[i]);
-                    Serial.print(" ");
+                    Serial.print(F(" "));
                     dataFile.print(errCode[i]);
                 }
                 filter = filter << 1;
@@ -215,7 +218,7 @@ void data_translate(){
         //Lock status
         filter = 1;
         dataByte = rxBuf[1];
-        Serial.print("Lock: ");
+        Serial.print(F("Lock: "));
         for(byte n=0; n<4; n++){
             if(dataByte & filter){
                 Serial.print(markStatus[n]);
@@ -227,11 +230,10 @@ void data_translate(){
         dataFile.print(delimiter);
 
         //Mode and gear
-        
-        Serial.print("Status: ");
+        Serial.print(F("Status: "));
         Serial.println(bikeStatus[(dataByte & 0x30)>>4]);
         dataFile.print(bikeStatus[(dataByte & 0x30)>>4]);dataFile.print(delimiter);
-        Serial.print("Gear: ");
+        Serial.print(F("Gear: "));
         Serial.println(gearStatus[(dataByte & 0xC0)>>6]);
         dataFile.print(gearStatus[(dataByte & 0xC0)>>6]);dataFile.print(delimiter);
 
@@ -239,7 +241,7 @@ void data_translate(){
         int rpm = rxBuf[3];
         rpm = rpm << 8;
         rpm += rxBuf[2];
-        Serial.print("RPM: ");
+        Serial.print(F("RPM: "));
         Serial.println(rpm);
         dataFile.print(rpm);dataFile.print(delimiter);
 
@@ -247,7 +249,7 @@ void data_translate(){
         int battLevel = rxBuf[5];
         battLevel = battLevel << 8;
         battLevel += rxBuf[4];
-        Serial.print("B-V: ");
+        Serial.print(F("B-V: "));
         Serial.println(float(battLevel*0.1));
         dataFile.print(float(battLevel*0.1));dataFile.print(delimiter);
 
@@ -255,7 +257,7 @@ void data_translate(){
         int battCurrent = rxBuf[7];
         battCurrent = battCurrent << 8;
         battCurrent += rxBuf[6];
-        Serial.print("B-I: ");
+        Serial.print(F("B-I: "));
         Serial.println(float(battCurrent*0.1));
         dataFile.print(float(battCurrent*0.1));dataFile.print(delimiter);
 
@@ -268,20 +270,20 @@ void data_translate(){
 
         //Controller temp
         unsigned char temp = rxBuf[0];
-        Serial.print("Ctmp: ");
+        Serial.print(F("Ctmp: "));
         Serial.println(temp);
         dataFile.print(temp);dataFile.print(delimiter);
 
         //Motor temp
         temp = rxBuf[1];
-        Serial.print("Mtmp: ");
+        Serial.print(F("Mtmp: "));
         Serial.println(temp);
         dataFile.print(temp);dataFile.print(delimiter);
 
         //Hall sensor
         dataByte = rxBuf[3];
         filter = 1;
-        Serial.print("Hall: ");
+        Serial.print(F("Hall: "));
         for (byte n=0; n<3; n++){
             if(dataByte & filter){
                 Serial.print(hallStatus[n]);
@@ -294,7 +296,7 @@ void data_translate(){
 
         //Throttle %
         unsigned char throttle = rxBuf[4];
-        Serial.print("Throt %: ");
+        Serial.print(F("Throt %: "));
         Serial.println(throttle);
         dataFile.print(throttle);dataFile.print(delimiter);
 
@@ -302,7 +304,7 @@ void data_translate(){
         dataByte = rxBuf[6];
         if(dataByte != 0){
             char filter = 1;
-            Serial.print("Err2: ");
+            Serial.print(F("Err2: "));
             for(int i=1; i<5; i++){
                 if(dataByte & filter){
                     Serial.print(errCode2[i]);

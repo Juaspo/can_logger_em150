@@ -7,6 +7,11 @@ void loop(){
     // Check incoming CAN buffer
     if(!digitalRead(CAN0_INT)){                 // If CAN0_INT pin is low, read receive buffer
         CAN0.readMsgBuf(&rxId, &len, rxBuf);    // Read data: len = data length, buf = data byte(s)
+        for(byte i = 0; i<len; i++){
+            sprintf(msgString, " 0x%.2X", rxBuf[i]);
+            Serial.print(msgString);
+        }
+        Serial.println();
         if(msgToRead){
             data_translate();
         }
