@@ -308,7 +308,7 @@ void data_translate(){
             for(int i=1; i<5; i++){
                 if(dataByte & filter){
                     Serial.print(errCode2[i]);
-                    Serial.print(" ");
+                    Serial.print(F(" "));
                     dataFile.print(errCode2[i]);
                     dataFile.print(" ");
                 }
