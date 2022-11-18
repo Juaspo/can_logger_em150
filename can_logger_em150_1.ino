@@ -3,6 +3,7 @@
  *
  *
  */
+ 
 void setup(){
     Serial.begin(9600);
 
@@ -59,6 +60,11 @@ void setup(){
         failFlags = failFlags | FAIL_SDRW;
     }
     status_update();                                // update error flags and status LED
+    get_date_time();
+    Serial.print(dateStr);
+    Serial.println(dateString);
+    Serial.print(timeStr);
+    Serial.println(timeString);
     Serial.print(F("Ready "));
     Serial.println(failFlags);
 }

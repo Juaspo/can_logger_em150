@@ -1,5 +1,6 @@
 /*
  CAN-logger for EM150
+ 
  Nano pin config:
  2 - CAN int
  4 - Red LED

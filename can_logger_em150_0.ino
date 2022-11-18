@@ -4,6 +4,15 @@
 *
 */
 
+void print_can_data(){
+    Serial.print(F("CAN data"));
+    for(byte i = 0; i<sizeof(rxBuf); i++){
+        sprintf(msgString, " 0x%.2X", rxBuf[i]);
+        Serial.print(msgString);
+    }
+    Serial.println();
+}
+
 void status_update(){
     if (failFlags & 0x0F){
         status_led(RED);
@@ -25,7 +34,7 @@ void status_update(){
     }
     else if (msgToRead) status_led(GREEN);
     else {
-        status_led(YELLOW);
+        status_led(BLUE);
     }
     lastFailFlag = failFlags;
 }
@@ -43,6 +52,7 @@ void log_on(){
     status_update();
     Serial.println(F("Log On"));
 }
+
 void log_off(){
     failFlags = failFlags & ~FAIL_CRX; //Clear failflag of CAN RX
     msgToRead = 0;
@@ -195,6 +205,7 @@ void data_translate(){
 
         //int i=0;
         dataByte = rxBuf[0];
+        Serial.println();
 
         //Error codes
         Serial.print(F("Err1: "));
@@ -238,7 +249,7 @@ void data_translate(){
         dataFile.print(gearStatus[(dataByte & 0xC0)>>6]);dataFile.print(delimiter);
 
         //RPM
-        int rpm = rxBuf[3];
+        unsigned int rpm = rxBuf[3];
         rpm = rpm << 8;
         rpm += rxBuf[2];
         Serial.print(F("RPM: "));
